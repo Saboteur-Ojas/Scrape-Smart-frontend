@@ -811,7 +811,7 @@ img {
   flex-shrink: 0;
   background: #fff;
   border-right: 1px solid rgba(57,54,102,0.07);
-  display: flex;
+  display: none;
   flex-direction: column;
   min-height: 100dvh;
   position: sticky;
