@@ -66,7 +66,8 @@ export async function getCityPickupRequestsForCollector(collectorId: string, col
   }
 
   const cityQuery = getCollectorCityNormalized(collector);
-  const open = (await apiFetch<PickupRequest[]>(`/api/collector/open-requests?city=${encodeURIComponent(cityQuery)}`)).map(normalizeRequest);
+  const rawOpen = await apiFetch<PickupRequest[] | null>(`/api/collector/open-requests?city=${encodeURIComponent(cityQuery)}`);
+  const open = Array.isArray(rawOpen) ? rawOpen.map(normalizeRequest) : [];
 
   return {
     open,
@@ -82,7 +83,8 @@ export async function getOpenPickupRequestsForCollector(collectorId: string) {
 
 export async function getAssignedCollectorRequests(collectorId: string) {
   if (!auth.currentUser || auth.currentUser.uid !== collectorId) throw new Error("You can read only your own pickups.");
-  const assigned = (await apiFetch<PickupRequest[]>("/api/collector/my-pickups")).map(normalizeRequest);
+  const rawAssigned = await apiFetch<PickupRequest[] | null>("/api/collector/my-pickups");
+  const assigned = Array.isArray(rawAssigned) ? rawAssigned.map(normalizeRequest) : [];
   return assigned.sort((a, b) => {
     return getMillis(b.updatedAt) - getMillis(a.updatedAt);
   });
