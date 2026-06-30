@@ -97,11 +97,10 @@ function requireCollectorUid() {
 }
 
 export async function acceptPickupRequest(requestId: string) {
-  requireCollectorUid();
-  const uid = auth.currentUser?.uid || "prototype_collector";
+  const uid = requireCollectorUid();
   return apiFetch<{ requestId: string; status: "accepted" }>(`/api/requests/${requestId}/accept`, {
     method: "POST",
-    body: JSON.stringify({ collectorId: uid, collectorName: "Prototype Collector" })
+    body: JSON.stringify({ collectorId: uid })
   });
 }
 
