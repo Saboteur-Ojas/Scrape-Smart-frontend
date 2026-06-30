@@ -52,6 +52,13 @@ export function useCollectorRequests() {
 
   useEffect(() => {
     fetchAll().catch(() => undefined);
+
+    // Auto-refresh every 30 seconds so new requests appear without manual reload
+    const interval = setInterval(() => {
+      fetchAll().catch(() => undefined);
+    }, 30_000);
+
+    return () => clearInterval(interval);
   }, [fetchAll]);
 
   return {

@@ -87,8 +87,8 @@ export async function createPickupRequest(input: CreatePickupRequestInput) {
 
 export async function getMyPickupRequests(userId: string) {
   if (!auth.currentUser || auth.currentUser.uid !== userId) throw new Error("You can read only your own requests.");
-  const data = await apiFetch<PickupRequest[]>("/api/user/my-requests");
-  return data.map(normalizeRequest);
+  const data = await apiFetch<PickupRequest[] | null>("/api/user/my-requests");
+  return Array.isArray(data) ? data.map(normalizeRequest) : [];
 }
 
 export async function getPickupRequestById(requestId: string) {
